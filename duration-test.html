@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Duration Logic Tests</title>
+    <style>
+        body {
+            background-color: #eee;
+            color:#222;
+            font-size: 16px;
+            font-family: helvetica;
+        }
+
+        h1 {
+            color: #444;
+            font-size: 50px;
+            font-weight: 100;
+        }
+
+        code {
+            display: block;
+            background-color: #dde3e8;
+            margin:0.5em;
+            padding: 0.5em;
+            border-radius: 5px;
+            font-family: courier;
+            max-width: 300px;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Duration Logic Tests</h1>
+
+    <code>getValue(unit,n)</code>
+    <code>getUnitValue(unit,n)</code>
+    <code>convertUnits(unit1,n,unit2)</code>
+    <code>getAllTheValues(n)</code>
+    <code>getBestValue(valueArray)</code>
+
+<script>
+
+units = {
+    'order': ['ms','seconds','minutes','hours','days','weeks','months','years'],
+    'ms': 1,
+    'seconds': ['ms' , 1000],
+    'minutes': ['seconds' , 60],
+    'hours': ['minutes' , 60],
+    'days': ['hours' , 24],
+    'weeks': ['days' , 7],
+    'months': ['weeks' , 4.34812],
+    'years': ['months' , 12]
+};
+
+getValue =function(unit, n) {
+    if( (units[unit]).constructor == Array) {
+        // recurse
+        // the units that makeup the requested unit divided by the number of those units in the requested unit
+        return getValue( (units[unit])[0], n ) / (units[unit])[1];
+    } else {
+        // only happens when it gets down to the smallest unit (ms)
+        return n;
+    }
+};
+
+getUnitValue = function(unit, n) {
+    // n = typeof n == 'Number' ? n : 1;
+    if( (units[unit]).constructor == Array) {
+        // recurse
+        // the units that makeup the requested unit divided by the number of those units in the requested unit
+        return getUnitValue( (units[unit])[0], n) * (units[unit])[1];
+    } else {
+        // only happens when it gets down to the smallest unit (ms)
+        return n;
+    }
+};
+
+convertUnits = function(unit1, n, unit2) {
+    return getValue(unit2, getUnitValue(unit1,n));
+};
+
+getAllTheValues = function(n) {
+    var a = [];
+
+    for(var u=0; u<units.order.length; u++) {
+
+        var value = getValue(units.order[u], n);
+        a.push(value);
+    }
+
+    return a;
+};
+
+getBestValue = function(valueArray) {
+
+    // var i = 0;
+    // var bestIndex = i;
+    // var bestValue = valueArray[i];
+
+    var bestIndex = 0;
+    for(var i=0; i< valueArray.length; i++) {
+        if(valueArray[i] > 1) {
+            bestIndex = i;
+        }
+    }
+
+    // while(valueArray[i] > 1) {
+    //     bestIndex = i
+    // }
+
+    var returnObj = {};
+    returnObj.unit = units.order[bestIndex];
+    returnObj.value = valueArray[bestIndex];
+
+    return returnObj;
+}
+
+
+</script>
+    <!-- <script type="text/javascript" src="../jq/jquery-1.7.1.min.js"></script> -->
+    <!-- // <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+  </body>
+</html>

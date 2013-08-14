@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Experimental Calendar UI</title>
+    <style>
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            float: left;
+            clear: both;
+            padding: 0.2em 0.4em;
+            margin: 0.5em 1em;
+            background-color: pink;
+            border-radius: 100px;
+            font-size: 16px;
+            font-family: helvetica, sans-serif;
+        }
+
+        li.allDay {
+            background-color: deeppink;
+        }
+
+        li.multiDay {
+            background-color: MediumVioletRed;
+        }
+
+
+    </style>
+    <link href="http://googleappsdeveloper.blogspot.com/2011/12/using-new-js-library-to-unlock-power-of.html" rel="author" />
+  </head>
+  <body>
+    <div id='content'>
+      <h1>Events</h1>
+      <ul id='events'></ul>
+    </div>
+    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
+
+    <script>
+
+        var clientId = '806463035830.apps.googleusercontent.com';
+        var apiKey = 'AIzaSyA_mP6FkPTbUMM2bHgqBAOfrWIZRQH9acs';
+        var scopes = 'https://www.googleapis.com/auth/calendar';
+        //---
+        function handleClientLoad() {
+          gapi.client.setApiKey(apiKey);
+          window.setTimeout(checkAuth,1);
+          checkAuth();
+        }
+
+        function checkAuth() {
+          gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
+              handleAuthResult);
+        }
+
+        function handleAuthResult(authResult) {
+          var authorizeButton = document.getElementById('authorize-button');
+          if (authResult) {
+            authorizeButton.style.visibility = 'hidden';
+            makeApiCall();
+          } else {
+            authorizeButton.style.visibility = '';
+            authorizeButton.onclick = handleAuthClick;
+           }
+        }
+
+        function handleAuthClick(event) {
+          gapi.auth.authorize(
+              {client_id: clientId, scope: scopes, immediate: false},
+              handleAuthResult);
+          return false;
+        }
+        //---
+        function makeApiCall() {
+          gapi.client.load('calendar', 'v3', function() {
+            var request = gapi.client.calendar.events.list({
+              // 'calendarId': 'primary'
+                // 'calendarId': 'usa__en@holiday.calendar.google.com',
+                'calendarId': 'rnalnb0ke7oip14ph8gjdfp6k4@group.calendar.google.com', /* chores cal */
+                'singleEvents': true,/* required to use timeMin */
+                'timeMin': '2013-02-01T11:43:22.000Z',
+                'orderBy': 'startTime'
+            });
+
+            request.execute(function(resp) {
+              for (var i = 0; i < resp.items.length; i++) {
+                var li = document.createElement('li');
+                var item = resp.items[i];
+                var classes = [];
+                var allDay = item.start.date? true : false;
+
+                // if(allDay) {
+                    // var firstDay = new Date(item.start.date);
+                    // var lastDay = new Date(item.end.date);
+                    // i dont have any multi-day chores.
+                    // var d=new Date("July 21, 1983 01:15:00");
+                    // var x=document.getElementById("demo");
+                    // d.setDate(d.getDate()+11);
+                    // x.innerHTML=d.getDate();
+                // }
+
+                var startDT = allDay ? item.start.date : item.start.dateTime;
+                    startDT = new Date(startDT);
+                var endDT = allDay ? item.end.date : item.end.dateTime;
+                    endDT = new Date(endDT);
+                var multiDay = startDT.setDate(startDT.getDate()+1) < endDT;
+
+                classes.push(allDay ? 'allDay' : '');
+                classes.push(multiDay ? 'multiDay' : '');
+                var str = [
+                    item.summary,
+                    ': &nbsp; &nbsp; [',
+                    startDT,
+                    ' - ',
+                    endDT,
+                    '] '
+                ];
+                // li.appendChild(document.createTextNode(resp.items[i].summary));
+                li.innerHTML = str.join('');
+                li.setAttribute('class', classes.join(' '));
+                document.getElementById('events').appendChild(li);
+              }
+            });
+          });
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+  </body>
+</html>

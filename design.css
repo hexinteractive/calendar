@@ -1,0 +1,199 @@
+
+/* apply a natural box layout model to all elements */
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+
+html,
+body{
+  font-family:arial,verdana,sans-serif;
+  margin:0;
+  padding:0;
+  color:#333;
+  text-align: center;
+  position: relative;
+  min-height: 100%;
+}
+
+html {
+    background-image: url(file:///Users/byuras000/Pictures/dlanham/dlanham-Tinnitus.jpg);
+    background-size: 100%;
+}
+
+body {
+    background: url("noise.png") repeat scroll 0 0 rgba(16, 79, 104, 0.7);
+    font-family: 'Roboto',sans-serif;
+    font-weight: 100;
+}
+
+ol {
+    font-size: 0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: relative;
+}
+/*dev*/
+li {
+    display: inline-block; /*TODO: ad hack*/
+    position: relative;
+    list-style: none;
+}
+
+.calendar {
+    white-space: nowrap;
+    padding: 100px 0 400px;
+    cursor: default;
+}
+
+.past {
+    /*opacity: 0.6;*/
+}
+
+.today {
+    /*outline: 1px dotted pink;*/
+}
+.today .day {
+    color: #4a4a4a;
+    color: #C9281A;/* redish */
+}
+.today .date {
+    /*font-weight: 300;*/
+    color: #333;
+    color: rgba(0, 0, 0, 0.64);
+    color: rgba(240, 50, 30, 0.64);/* redish */
+    text-shadow: 1px 2px 1px #666, 3px 4px 4px #888;
+}
+
+.month {
+    color: #FFF;
+    color: #C1483B; /* redish */
+    font-size: 60px;
+    font-weight: 100;
+    margin: 0;
+    padding: 0 524px;
+    text-align: left;
+    text-shadow: 1px 2px 1px #111, 3px 4px 4px #111, 5px 7px 8px #000, 7px 10px 14px #000;
+}
+
+.sun,
+.mon,
+.tue,
+.wed,
+.thr,
+.fri,
+.sat,
+.sunday,
+.monday,
+.tuesday,
+.wednesday,
+.thursday,
+.friday,
+.saturday {
+    width: 200px;
+    height: 200px;
+    background-color: #EBEDEF;
+    background-image: -moz-linear-gradient(-45deg,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(-45deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+    background-image: linear-gradient(135deg,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    /*background-color: rgba(255,255,255,0.9);*/
+    margin: 10px 25px;
+    border: 1px solid #EFF1F2;
+    /*border-color: #FBFCFC #DBDCDD #A6A6A6 #EFF1F2;*/
+    border-color: #fff #DBDCDD #A6A6A6 #EFF1F2;
+    box-shadow: 24px 56px 40px 0 rgba(0,0,0,0.3), 14px 56px 20px -20px rgba(0,0,0,0.3);
+    border-radius: 7px;
+}
+
+time {
+/*    font-family: 'Roboto',sans-serif;*/
+}
+
+.day {
+    color: #737373;
+    display: block;
+    font-size: 29px;
+    margin: 5px 17px 0 10px;
+    text-align: left;
+    font-weight: 200;
+    text-shadow: 0 1px 1px #fff; /*not very visible*/
+}
+
+.date {
+    font-size: 140px;
+    display: block;
+    text-align: center;
+    line-height: 150px;
+    font-weight: 100;
+    /*text-shadow: 1px 2px 1px #999;*/
+    /*text-shadow: 1px 2px 1px #999, 2px 2px 4px #CCCCCC, 3px 4px 4px #CCCCCC, 1px 2px 1px #666666;*/
+    text-shadow: 1px 2px 1px #999, 3px 4px 4px #CCCCCC;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+
+.events {
+    position: absolute;
+    display: block;
+    width: 100%;
+    /*margin-top: 10px*/
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 7px;
+    top:100%;
+    margin-top: 10px;
+    padding: 5px;
+    text-align: right;
+
+}
+/*
+TODO asdf  d
+*/
+.events li {
+    display: block;
+    padding: 6px;
+    margin:5px 0 5px 0;
+    margin: 0 0 5px 0;
+    height: auto;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 200;
+    border: 1px solid #EFF1F2;
+    border-radius: 7px;
+    text-align: left;
+    /*background-color: #999;*/
+    background-color: #EBEDEF;
+    /*background-color: rgba(255,255,255,0.5);*/
+    box-shadow: 24px 56px 40px 0 rgba(0,0,0,0.3), 14px 56px 20px -20px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+.events li.add {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 100;
+    height: 28px;
+    line-height: 14px;
+    text-align: center;
+    width: 30px;
+    margin-top: 0;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border-width: 0;
+}
+
+.events li.add {
+    /*visibility: hidden;*/
+    transition: opacity 0.75s;
+    opacity: 0;
+}
+li:hover li.add {
+    /*visibility:visible;*/
+    opacity: 1;
+}
+
+.events li:last-child {
+    margin-bottom: 0;
+}

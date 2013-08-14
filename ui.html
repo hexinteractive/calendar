@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:100,200,300,700' rel='stylesheet' type='text/css'>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Calendar Experiement</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+<body class="">
+    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
+    <div class="calendar">
+        <!-- TODO: add section.year and section.year time .name -->
+        <!-- TODO: maybe add the computer-readable time -->
+        <section class="month current">
+            <h1 class="name">March</h1>
+            <ol id="events" start="">
+                <li class="day wednesday">
+                    <time>
+                        <span class="name">Wednesday</span>
+                        <span class="date">20</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">neat</li>
+                    </ol>
+                </li>
+                <li class="day thursday current">
+                    <time>
+                        <span class="name">Thursday</span>
+                        <span class="date">21</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">hi there</li>
+                        <li class="">neat</li>
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day friday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+
+        <div id="results"></div>
+    </div>
+    <!-- // <script type="text/javascript" src="../jq/jquery-1.7.1.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="jcode.js"></script>
+    <script>
+
+        var today = new Date();
+        var months = ['January', 'February','March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        var thisMonth = months[today.getMonth()];
+
+        getDayMarkup = function(i) {
+            var theDay = new Date();
+                theDay.setDate(today.getDate() + i);
+            var dayClass = (days[theDay.getDay()]).toLowerCase();
+            var todayClass = i == 0 ? 'current' : '';
+            var dayMarkup = [
+           ' <li class="day ' + dayClass + ' ' + todayClass + '">',
+           '     <time datetime="' + theDay.toDateString() + '">',
+           '         <span class="name">'+ days[theDay.getDay()] +'</span>',
+           '         <span class="date">' + theDay.getDate() + '</span>',
+           '     </time>',
+           '     <ol class="events">',
+           '         <li class="add">+</li>',
+           '     </ol>',
+           ' </li>'
+            ];
+            return dayMarkup.join('');
+        };
+
+
+        $('h1').text(thisMonth);
+
+        var allTheDays = '';
+        for(var i=-2; i<14; i++) {
+            allTheDays += getDayMarkup(i);
+        }
+
+        $('.calendar .month > ol').html(allTheDays);
+        // console.log(allTheDays);
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+</body>
+</html>

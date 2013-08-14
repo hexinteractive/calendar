@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Experimental Calendar UI</title>
+    <style>
+
+        h1{
+          border-radius: 100px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            float: left;
+            clear: both;
+            padding: 0.2em 0.4em;
+            margin: 0.5em 1em;
+            background-color: pink;
+            border-radius: 100px;
+            font-size: 16px;
+            font-family: helvetica, sans-serif;
+        }
+
+        li.allDay {
+            background-color: deeppink;
+        }
+
+        li.multiDay {
+            background-color: MediumVioletRed;
+        }
+
+        .length {
+          background-color: red;
+        }
+
+
+    </style>
+    <link href="http://googleappsdeveloper.blogspot.com/2011/12/using-new-js-library-to-unlock-power-of.html" rel="author" />
+  </head>
+  <body>
+    <div id='content'>
+      <h1>Events</h1>
+      <ul id='events'></ul>
+    </div>
+    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
+
+
+    <!-- <script type="text/javascript" src="../jq/jquery-1.7.1.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="jcode.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+  </body>
+</html>
