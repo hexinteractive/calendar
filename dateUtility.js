@@ -48,20 +48,20 @@ dateUtility = (function() {
         },
 
         formateDateTimeString: function(date) {
-            var confirmedDate = castToDate(date);
+            var confirmedDate = this.castToDate(date);
             if(confirmedDate) {
                 dateTimeString = [
                     confirmedDate.getFullYear(),
                     '-',
-                    leadingZeros(1+confirmedDate.getMonth(),2),
+                    this.leadingZeros(1+confirmedDate.getMonth(),2),
                     '-',
-                    leadingZeros(confirmedDate.getDate(),2),
+                    this.leadingZeros(confirmedDate.getDate(),2),
                     'T',
-                    leadingZeros(confirmedDate.getHours(),2),
+                    this.leadingZeros(confirmedDate.getHours(),2),
                     ':',
-                    leadingZeros(confirmedDate.getMinutes(),2),
+                    this.leadingZeros(confirmedDate.getMinutes(),2),
                     ':',
-                    leadingZeros(confirmedDate.getSeconds(),2),
+                    this.leadingZeros(confirmedDate.getSeconds(),2),
                     '.',
                     (confirmedDate.getTimezoneOffset()/60),
                     'Z'
