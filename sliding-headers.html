@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Sliding Headers Prototype</title>
+    <style>
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .calendar {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+
+        .month {
+            background: none repeat scroll 0 0 orange;
+            display: inline-block;
+            position: relative;
+        }
+
+        .day {
+            width: 200px;
+            margin: 0 20px;
+            display: inline-block;
+            list-style: none outside none;
+            position: relative;
+            background: pink;
+        }
+
+
+        .month > .name {
+            margin: 0;
+            position: absolute;
+            top: 0;
+        }
+
+        .month.current > .name {
+            left: 550px;
+            position: fixed;
+            /*top: 0;*/
+        }
+
+        .month.next > .name {
+            position: absolute;
+            right: auto;
+            left: 0;
+        }
+
+        .month.prev > .name {
+            position: absolute;
+            right: 0;
+            left: auto;
+        }
+
+
+        .day time,
+        .day .events {
+            width: 200px;
+        }
+
+        .day time {
+            position: relative;
+            display: block;
+            height: 200px;
+            background: ivory;
+        }
+
+        .day .events {
+            position: relative; /*TODO*//*do i need this?*/
+        }
+
+
+    </style>
+</head>
+<body class="">
+    <div class="calendar">
+        <!-- TODO: add section.year and section.year time .name -->
+        <!-- TODO: maybe add the computer-readable time -->
+        <section class="month current">
+            <h1 class="name">March</h1>
+            <ol id="events" start="">
+                <li class="day wednesday">
+                    <time>
+                        <span class="name">Wednesday</span>
+                        <span class="date">20</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">neat</li>
+                    </ol>
+                </li>
+                <li class="day thursday current">
+                    <time>
+                        <span class="name">Thursday</span>
+                        <span class="date">21</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">hi there</li>
+                        <li class="">neat</li>
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day friday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day saturday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day sunday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+
+        <section class="month next">
+            <h1 class="name">April</h1>
+            <ol id="events" start="">
+                <li class="day wednesday">
+                    <time>
+                        <span class="name">Wednesday</span>
+                        <span class="date">20</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">neat</li>
+                    </ol>
+                </li>
+                <li class="day thursday current">
+                    <time>
+                        <span class="name">Thursday</span>
+                        <span class="date">21</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">hi there</li>
+                        <li class="">neat</li>
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day friday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day saturday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day sunday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+
+        <div id="results">
+
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script>
+            $(document).ready(function(){
+
+
+                $('.calendar').scroll(function(){
+
+                    var currMonth = $('.month.current > .name');
+                    console.log('currMonth: ', currMonth.length);
+                    var currMonthLeft = currMonth.offset();
+                        currMonthLeft = currMonthLeft.left;
+
+                    var currMonthWidth = currMonth.outerWidth();
+                    var nextMonthLeft = ($('.month.next > .name').offset()).left;
+
+                    if( currMonthLeft + currMonthWidth  > nextMonthLeft) {
+                        $('.month.current').removeClass('current').addClass('prev');
+                    } else {
+                        $('.month.current.prev').removeClass('prev').addClass('current');
+                    }
+
+                });
+            });
+
+            // $('.calendar').scrollLeft();
+
+    </script>
+
+</body>
+</html>
