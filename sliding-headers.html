@@ -18,12 +18,21 @@
             overflow-x: scroll;
             overflow-y: hidden;
             white-space: nowrap;
+            font-size: 0;
         }
 
         .month {
             background: none repeat scroll 0 0 orange;
             display: inline-block;
             position: relative;
+            font-size: 16px;
+            outline: 1px dotted brown;
+            outline-width: 0 1px;
+        }
+
+        .month > ol {
+            margin-top: 40px;
+            padding: 0;
         }
 
         .day {
@@ -33,8 +42,8 @@
             list-style: none outside none;
             position: relative;
             background: pink;
+            vertical-align: top;
         }
-
 
         .month > .name {
             margin: 0;
@@ -42,21 +51,23 @@
             top: 0;
         }
 
-        .month.current > .name {
+        .month.middle > .name {
             left: 550px;
             position: fixed;
             /*top: 0;*/
         }
 
-        .month.next > .name {
+        .month.begining > .name {
             position: absolute;
             right: auto;
             left: 0;
+            left: 20px;
         }
 
-        .month.prev > .name {
+        .month.end > .name {
             position: absolute;
             right: 0;
+            right: 20px;
             left: auto;
         }
 
@@ -78,13 +89,24 @@
         }
 
 
+        #scrimmage {
+            position: fixed;
+            top: 0;
+            left: 550px;
+            width: 0;
+            height: 100%;
+            border-left: 1px solid purple;
+            z-index: 1;
+        }
+
     </style>
 </head>
 <body class="">
     <div class="calendar">
+        <div id="scrimmage"></div>
         <!-- TODO: add section.year and section.year time .name -->
         <!-- TODO: maybe add the computer-readable time -->
-        <section class="month current">
+        <section class="month march middle">
             <h1 class="name">March</h1>
             <ol id="events" start="">
                 <li class="day wednesday">
@@ -137,7 +159,7 @@
             </ol>
         </section>
 
-        <section class="month next">
+        <section class="month april begining">
             <h1 class="name">April</h1>
             <ol id="events" start="">
                 <li class="day wednesday">
@@ -201,18 +223,32 @@
 
                 $('.calendar').scroll(function(){
 
-                    var currMonth = $('.month.current > .name');
+                    var currMonth = $('.month.march > .name');
                     console.log('currMonth: ', currMonth.length);
                     var currMonthLeft = currMonth.offset();
                         currMonthLeft = currMonthLeft.left;
 
                     var currMonthWidth = currMonth.outerWidth();
-                    var nextMonthLeft = ($('.month.next > .name').offset()).left;
+                    var nextMonthLeft = ($('.month.april > .name').offset()).left;
 
                     if( currMonthLeft + currMonthWidth  > nextMonthLeft) {
-                        $('.month.current').removeClass('current').addClass('prev');
+                        $('.month.march').removeClass('middle').addClass('end');
+                        // $('.month.april').removeClass('begining').addClass('middle');
                     } else {
-                        $('.month.current.prev').removeClass('prev').addClass('current');
+                        // $('.month.march').removeClass()
+                        // $('.month.april.begining').removeClass('begining').addClass('middle');
+                    }
+
+
+                    /*TODO*/ //I need to define the line of scrimmage
+                    var scrimmage = 550;
+                    if( nextMonthLeft < scrimmage ) {
+                        setTimeout(function(){$('.month.april').removeClass('begining').addClass('middle');},0);
+
+                        // $('.month.april').removeClass('begining').addClass('middle');
+                    } else {
+                        setTimeout(function(){$('.month.april').removeClass('middle').addClass('begining');},0);
+
                     }
 
                 });
