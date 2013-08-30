@@ -3,11 +3,15 @@ Statement:
 
 
 TODO:
-    use dateUtility.js
     split out google code from my UI code
     set the fixed/slide of the month
+    update days markup generation to create <section><h1><ol> per month
 
-
+    sliding-header prototype:
+     - refactor to optimize code inside the scrollLeft events
+     - document the logic
+     - rename poorly named items
+     - integrate prototype into main project
 
 
 URLs:
