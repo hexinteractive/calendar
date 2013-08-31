@@ -11,6 +11,7 @@
         body {
             margin: 0;
             padding: 0;
+            background: #333
         }
 
 
@@ -331,88 +332,53 @@
     <script>
             $(document).ready(function(){
 
+                var calendar = $('.calendar');
                 var months = $('.month');// will need to be updated every time I load more days into the calendar.
-                var scrimmage = 550;
-                var zeroLine = scrimmage;
+                var monthNames = months.find('> .name');
+                var zeroLine = 550;
                 var beforeZero;
                 var afterZero;
-
-
                 var monthslefts = [];
-                var monthsNamesRights = [];
+                var monthNamesRights = [];
+                var pastBeforeZero = null;
+
                 $.each(months, function(i, item) {
-                    // such awful naming..
-                    // var left = $(item).offset();
-                    var currentItem = $(item);
-                    // var left = $(item).position();
-                    var left = currentItem.position();
-                        left = left.left;
-                    // if(left > zeroLine) {
-                        // beforeZero = i - 1;
-                        // afterZero  = i;
-                        // return false;// break out
-                    // }
-                    // monthslefts[monthslefts.length] = left;
-                    // monthsNamesRights[monthsNamesRights.length] =  monthBeforeZero.find('> .name').outerWidth();
-                    monthslefts[i] = left;
-                    monthsNamesRights[i] =  currentItem.find('> .name').outerWidth();
-                    console.log('current name:  ', currentItem.find('> .name').text());
-                    console.log('current width: ', currentItem.find('> .name').outerWidth());
+                    // which is faster? $(item) or months.eq(i) ?
+                    monthslefts[i] = months.eq(i).position().left;
+                    monthNamesRights[i] =  monthNames.eq(i).outerWidth();
                 });
 
-                console.log('monthslefts: ', monthslefts);
-
-                // var loadedMonths = [];
-                // do just store the left position on the elem til i get a better js spot ready?
-
-
-
-                var calendar = $('.calendar');
                 calendar.scroll(function(){
 
-
                     var scrollLeft = calendar.scrollLeft();
-                    // console.log('calendar.scrollLeft: ', calendar.scrollLeft() );
                     var scrollZero = scrollLeft + zeroLine;
                     for(var i=0, l=monthslefts.length; i < l; i++) {
                         if( monthslefts[i] > scrollZero ) {
-                            // console.log('monthslefts['+i+'] is the first afterZero');
                             beforeZero = i-1;
                             afterZero  = i;
                             break;
                         }
                     }
 
-                    //TODO: only do this work if the beforeZero changes value;
+                    if(pastBeforeZero !== beforeZero) { //only do this work when the current/focused month changes
+                        months.removeClass('begining middle end');
+                        // which is faster? $(beforeZero) or months.eq(beforeZero) ?
+                        var monthBeforeZero = $(months[beforeZero]);
+                        var monthAftreZero  = $(months[afterZero]);
 
-                    months.removeClass('begining middle end');
+                        if( (monthslefts[afterZero] - monthNamesRights[beforeZero]) < scrollZero) {
+                            monthBeforeZero.addClass('end');
+                        }else{
+                            monthBeforeZero.addClass('middle');
+                        }
 
-                    var monthBeforeZero = $(months[beforeZero]);
-                    var monthAftreZero  = $(months[afterZero]);
-                    // var monthBeforeZeroRight = monthBeforeZero.find('> .name').outerWidth();
-                    // console.log('old: ', monthBeforeZeroRight);
-                    var monthBeforeZeroRight = monthsNamesRights[beforeZero];
-                    console.log('new: ', monthBeforeZeroRight);
-
-                    if(monthslefts[afterZero] - monthBeforeZeroRight < scrollZero) {
-                        monthBeforeZero.addClass('end');
-                    }else{
-                        monthBeforeZero.addClass('middle');
+                        monthAftreZero.addClass('begining');
                     }
-
-                    monthAftreZero.addClass('begining');
-
-
-
-
-
-
-
 
                 });
 
-                $('.calendar').scrollLeft(1).scrollLeft(0);
-
+                // this inits the month name positions
+                calendar.scrollLeft(1).scrollLeft(0);
             });
     </script>
 
