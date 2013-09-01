@@ -425,7 +425,8 @@
                         if(pastBeforeZero !== beforeZero) { // only do this work when the focused month changes
                             // console.log('(monthslefts[afterZero] - monthNamesRights[beforeZero]): ', (monthslefts[afterZero] - monthNamesRights[beforeZero]) );
                             // console.log('afterZero: ', afterZero);
-                            if( ((monthslefts[afterZero] - monthNamesRights[beforeZero]) || scrollZero+1) < scrollZero) {
+                            console.log('(monthslefts[afterZero] - monthNamesRights[beforeZero]): ', (monthslefts[afterZero] - monthNamesRights[beforeZero]));
+                            if( (monthslefts[afterZero] - monthNamesRights[beforeZero]) < scrollZero) {
                                 // if the month on the right side of the zeroLine starts on the left side
                                 $(months[beforeZero]).removeClass('begining middle').addClass('end');
                             }else{
