@@ -20,6 +20,7 @@
             overflow-y: hidden;
             white-space: nowrap;
             font-size: 0;
+            position: relative;
         }
 
         .month {
@@ -95,7 +96,8 @@
         }
 
 
-        #scrimmage {
+        #scrimmage,
+        #zeroLine {
             position: fixed;
             top: 0;
             left: 550px;
@@ -109,7 +111,7 @@
 </head>
 <body class="">
     <div class="calendar">
-        <div id="scrimmage"></div>
+        <div id="zeroLine"></div>
         <!-- TODO: add section.year and section.year time .name -->
         <!-- TODO: maybe add the computer-readable time -->
         <section class="month march">
@@ -324,6 +326,59 @@
             </ol>
         </section>
 
+        <section class="month july">
+            <h1 class="name">July</h1>
+            <ol id="events" start="">
+                <li class="day wednesday">
+                    <time>
+                        <span class="name">Wednesday</span>
+                        <span class="date">20</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">neat</li>
+                    </ol>
+                </li>
+                <li class="day thursday current">
+                    <time>
+                        <span class="name">Thursday</span>
+                        <span class="date">21</span>
+                    </time>
+                    <ol class="events">
+                        <li class="">hi there</li>
+                        <li class="">neat</li>
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day friday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day saturday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+                <li class="day sunday">
+                    <time>
+                        <span class="name">Friday</span>
+                        <span class="date">22</span>
+                    </time>
+                    <ol class="events">
+                        <li class="add">+</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+
         <div id="results">
 
         </div>
@@ -332,53 +387,61 @@
     <script>
             $(document).ready(function(){
 
-                var calendar = $('.calendar');
-                var months = $('.month');// will need to be updated every time I load more days into the calendar.
-                var monthNames = months.find('> .name');
-                var zeroLine = 550;
-                var beforeZero;
-                var afterZero;
-                var monthslefts = [];
-                var monthNamesRights = [];
-                var pastBeforeZero = null;
+                // can I reduce the number of vars needed?
+                var calendar = $('.calendar'),
+                    calendarLeft, // I might need this for calculating the month names in layouts that dont have the calendars left at zero.
+                    months = $('.month'), // will need to be updated every time I load more days into the calendar.
+                    monthNames = months.find('> .name'),
+                    zeroLine = $('#zeroLine').position().left, // by using an elem instead of a number I can adjust the zeroLine via mediaQuery
+                    beforeZero,
+                    afterZero,
+                    monthslefts = [],
+                    monthNamesRights = [],
+                    pastBeforeZero = null;
 
-                $.each(months, function(i, item) {
-                    // which is faster? $(item) or months.eq(i) ?
-                    monthslefts[i] = months.eq(i).position().left;
-                    monthNamesRights[i] =  monthNames.eq(i).outerWidth();
-                });
+                function init() {
 
-                calendar.scroll(function(){
-
-                    var scrollLeft = calendar.scrollLeft();
-                    var scrollZero = scrollLeft + zeroLine;
-                    for(var i=0, l=monthslefts.length; i < l; i++) {
-                        if( monthslefts[i] > scrollZero ) {
-                            beforeZero = i-1;
-                            afterZero  = i;
-                            break;
-                        }
+                    calendar.scrollLeft(0); // scroll back to zero so that the month lefts arent offset by the scroll position
+                    // move into a function, rebuild the data after each time I add days to the calendar.
+                    // collect data on the months loaded into the calendar. this should be done every time I load more days into the calendar.
+                    var mLen = months.length;
+                    while(mLen--){
+                        monthslefts[mLen] = $(months[mLen]).position().left; // get the left edge of the month block
+                        monthNamesRights[mLen] = $(monthNames[mLen]).outerWidth(); // get the width to find the right edge of the month's heading (so I know when to start pushing it out of the way)
                     }
 
-                    if(pastBeforeZero !== beforeZero) { //only do this work when the current/focused month changes
-                        months.removeClass('begining middle end');
-                        // which is faster? $(beforeZero) or months.eq(beforeZero) ?
-                        var monthBeforeZero = $(months[beforeZero]);
-                        var monthAftreZero  = $(months[afterZero]);
-
-                        if( (monthslefts[afterZero] - monthNamesRights[beforeZero]) < scrollZero) {
-                            monthBeforeZero.addClass('end');
-                        }else{
-                            monthBeforeZero.addClass('middle');
+                    calendar.scroll(function(){
+                        var scrollZero = calendar.scrollLeft() + zeroLine; // consider factoring in calendarLeft
+                        // perhaps I could do some kind of while(outOfRange(..))
+                        // console.log('monthslefts.length: ', monthslefts.length);
+                        for(var i=0, l=monthslefts.length; i < l; i++) {
+                            if( monthslefts[i] > scrollZero ) {
+                                beforeZero = i-1;
+                                afterZero  = i;
+                                break;
+                            }
                         }
 
-                        monthAftreZero.addClass('begining');
-                    }
+                        if(pastBeforeZero !== beforeZero) { // only do this work when the focused month changes
+                            // console.log('(monthslefts[afterZero] - monthNamesRights[beforeZero]): ', (monthslefts[afterZero] - monthNamesRights[beforeZero]) );
+                            // console.log('afterZero: ', afterZero);
+                            if( ((monthslefts[afterZero] - monthNamesRights[beforeZero]) || scrollZero+1) < scrollZero) {
+                                // if the month on the right side of the zeroLine starts on the left side
+                                $(months[beforeZero]).removeClass('begining middle').addClass('end');
+                            }else{
+                                $(months[beforeZero]).removeClass('begining end').addClass('middle');
+                            }
+                            $(months[afterZero]).removeClass('middle end').addClass('begining');
 
-                });
+                        }
+                    });//scroll end
 
-                // this inits the month name positions
-                calendar.scrollLeft(1).scrollLeft(0);
+                    calendar.scrollLeft(1).scrollLeft(0); // this kicks the month name positions
+
+                }//init end
+
+                init();
+
             });
     </script>
 

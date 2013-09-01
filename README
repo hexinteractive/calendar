@@ -8,11 +8,8 @@ TODO:
     update days markup generation to create <section><h1><ol> per month
 
     sliding-header prototype:
-     - refactor to optimize code inside the scrollLeft events
-     - document the logic
-     - rename poorly named items
      - integrate prototype into main project
-
+     - fix .middle class not working on the last month in the calendar
 
 URLs:
  http://designmodo.github.com/Flat-UI/
