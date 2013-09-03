@@ -9,8 +9,17 @@ TODO:
 
     sliding-header prototype:
      - integrate prototype into main project
-     - fix .middle class not working on the last month in the calendar
+
 
 URLs:
  http://designmodo.github.com/Flat-UI/
 
+
+NOTES:
+    var myArray = ['a','b','c','d','e','f','g','h','i','j','k'];
+    var len = myArray.length;
+    var i = 34;
+    myArray[i%len]
+
+
+    $('.calendar').animate({'scrollLeft':$('.calendar').scrollLeft()+245},1000);

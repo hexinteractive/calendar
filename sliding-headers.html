@@ -411,33 +411,29 @@
                     }
 
                     calendar.scroll(function(){
-                        var scrollZero = calendar.scrollLeft() + zeroLine; // consider factoring in calendarLeft
-                        // perhaps I could do some kind of while(outOfRange(..))
-                        // console.log('monthslefts.length: ', monthslefts.length);
-                        for(var i=0, l=monthslefts.length; i < l; i++) {
-                            if( monthslefts[i] > scrollZero ) {
-                                beforeZero = i-1;
-                                afterZero  = i;
+                        var scrollZero = calendar.scrollLeft() + zeroLine, // consider factoring in calendarLeft
+                            leftsLen = monthslefts.length;
+                        while(leftsLen--) { // perhaps I could do some kind of while(outOfRange(..))
+                            if( monthslefts[leftsLen] < scrollZero ) {
+                                beforeZero = leftsLen;
+                                afterZero  = leftsLen+1;
                                 break;
                             }
                         }
 
                         if(pastBeforeZero !== beforeZero) { // only do this work when the focused month changes
-                            // console.log('(monthslefts[afterZero] - monthNamesRights[beforeZero]): ', (monthslefts[afterZero] - monthNamesRights[beforeZero]) );
-                            // console.log('afterZero: ', afterZero);
-                            console.log('(monthslefts[afterZero] - monthNamesRights[beforeZero]): ', (monthslefts[afterZero] - monthNamesRights[beforeZero]));
-                            if( (monthslefts[afterZero] - monthNamesRights[beforeZero]) < scrollZero) {
-                                // if the month on the right side of the zeroLine starts on the left side
-                                $(months[beforeZero]).removeClass('begining middle').addClass('end');
-                            }else{
-                                $(months[beforeZero]).removeClass('begining end').addClass('middle');
+
+                            if( (monthslefts[afterZero] - monthNamesRights[beforeZero]) < scrollZero) { // if the month on the right side of the zeroLine starts on the left side
+                                $(months[beforeZero]).removeClass('begining middle').addClass('end'); // then the month on the left side's name gets right aligned
+                            }else{ // if the month on the right side of the zeroLine starts on the right side
+                                $(months[beforeZero]).removeClass('begining end').addClass('middle'); // then the month on the left side's name gets fixed in the middle
                             }
-                            $(months[afterZero]).removeClass('middle end').addClass('begining');
+                            $(months[afterZero]).removeClass('middle end').addClass('begining');// the month on the right side's name gets left aligned. always.
 
                         }
                     });//scroll end
 
-                    calendar.scrollLeft(1).scrollLeft(0); // this kicks the month name positions
+                    calendar.scrollLeft(1).scrollLeft(0); // this kicks the month name positions to render
 
                 }//init end
 
